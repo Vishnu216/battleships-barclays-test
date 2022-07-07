@@ -27,6 +27,7 @@ namespace Battleships
         /// <returns>Count of sunk ships</returns>
         public static int Play(string[] ships, string[] guesses)
         {
+            ValidateInputs(ships, guesses);
             SetShipCellCollection(ships);
             return GetSunkShipCount(guesses);
         }
@@ -84,5 +85,17 @@ namespace Battleships
         /// <returns>The number of ships sunk</returns>
         private static int GetSunkShipCount(string[] guesses) =>
             _ships.Count(ship => ship.All(shipCell => guesses.Contains(shipCell)));
+
+        private static void ValidateInputs(string[] ships, string[] guesses)
+        {
+            if (ships == null || guesses == null)
+            {
+                throw new ArgumentNullException($"One of the input parameters are null {nameof(ships)} or {nameof(guesses)}");
+            }
+            if (ships.Any(ship => !ship.Contains(":")) || guesses.Any(guess => !guess.Contains(":")))
+            {
+                throw new InvalidOperationException("Invalid input parameters found");
+            }
+        }
     }
 }
